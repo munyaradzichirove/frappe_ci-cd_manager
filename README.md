@@ -1,33 +1,55 @@
-### Orchestrator
+# Flowmaster Orchestrator
 
-This app manages all ci/cd for other sites
+**Flowmaster** is the CI/CD master site. **Orchestrator** is the Frappe app inside it that manages deployments to remote Frappe sites.
 
-### Installation
+---
 
-You can install this app using the [bench](https://github.com/frappe/bench) CLI:
+## **Features**
 
-```bash
-cd $PATH_TO_YOUR_BENCH
-bench get-app $URL_OF_THIS_REPO --branch develop
-bench install-app orchestrator
-```
+* Centralized GitHub webhook receiver
+* Manage multiple apps/repos in one place
+* Per-site deployment settings (pause, pull now, branch override)
+* Commit history logging (commit SHA, message, time received)
+* Deployment logging (status, last deployment time)
+* Optional scheduling and timezone support
+* Fully powered by Ansible for remote deployments
 
-### Contributing
+---
 
-This app uses `pre-commit` for code formatting and linting. Please [install pre-commit](https://pre-commit.com/#installation) and enable it for this repository:
+## **How It Works**
 
-```bash
-cd apps/orchestrator
-pre-commit install
-```
+1. GitHub webhook sends a push event to Flowmaster.
+2. Orchestrator checks which app the commit belongs to.
+3. Loops through the sites linked under that app.
+4. Executes Ansible playbooks to pull, migrate, and restart remote sites.
+5. Logs commit messages, deployment status, and timestamps.
 
-Pre-commit is configured to use the following tools for checking and formatting your code:
+---
 
-- ruff
-- eslint
-- prettier
-- pyupgrade
+## **DocTypes Overview**
 
-### License
+* **App**: Parent DocType storing repo info and linking child site deployments.
+* **Site Deployment**: Child table under App; stores per-site configs and controls.
+* **Site**: Reference table for all available sites (name + IP).
+* **Deployment Log**: Tracks status and time of each deployment.
+* **Commit History**: Tracks commit SHA, message, and time received from GitHub.
 
-mit
+---
+
+## **Getting Started**
+
+1. Install Frappe and setup the Flowmaster site.
+2. Install the **Orchestrator** app.
+3. Add your apps/repos in Orchestrator.
+4. Add sites to each app in the child table.
+5. Set up GitHub webhooks pointing to Flowmaster.
+6. Configure Ansible inventory and playbooks for remote deployments.
+
+---
+
+## **Future Enhancements**
+
+* Rollback specific commits
+* Advanced scheduling of deployments
+* Visual commit & deployment dashboards
+
