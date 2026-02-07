@@ -1,0 +1,92 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-02-07 17:07:16.739248",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "site",
+  "pull_now",
+  "pause_pull",
+  "schedule_next_pull",
+  "column_break_xjid",
+  "last_deployment_time",
+  "last_deployment_status"
+ ],
+ "fields": [
+  {
+   "description": "Select the remote site to deploy this app to",
+   "fieldname": "site",
+   "fieldtype": "Link",
+   "in_filter": 1,
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Site",
+   "options": "Site Inventory"
+  },
+  {
+   "description": "Click to immediately deploy the latest code to this site.",
+   "fieldname": "pull_now",
+   "fieldtype": "Button",
+   "label": "Pull Now"
+  },
+  {
+   "default": "0",
+   "fieldname": "pause_pull",
+   "fieldtype": "Check",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Pause Pull"
+  },
+  {
+   "description": "Displays the result of the last deployment: Pending, Success, or Failed.",
+   "fieldname": "last_deployment_status",
+   "fieldtype": "Select",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Last Deployment Status",
+   "options": "Pending\nSuccess\nFailed"
+  },
+  {
+   "description": "Timestamp of the last deployment in the chosen timezone",
+   "fieldname": "last_deployment_time",
+   "fieldtype": "Datetime",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Last Deployment Time"
+  },
+  {
+   "fieldname": "schedule_next_pull",
+   "fieldtype": "Datetime",
+   "label": "Schedule Next Pull"
+  },
+  {
+   "fieldname": "column_break_xjid",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-02-07 17:19:26.290243",
+ "modified_by": "Administrator",
+ "module": "Orchestrator",
+ "name": "Site Deployment",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

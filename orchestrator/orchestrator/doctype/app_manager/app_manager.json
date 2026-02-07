@@ -1,0 +1,101 @@
+{
+ "actions": [],
+ "autoname": "autoincrement",
+ "creation": "2026-02-07 16:54:31.025815",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "app_section",
+  "app_name",
+  "repo",
+  "column_break_hbzq",
+  "default_branch",
+  "webhook_secret",
+  "section_break_mves",
+  "sites"
+ ],
+ "fields": [
+  {
+   "description": "Enter a name for your app.",
+   "fieldname": "app_name",
+   "fieldtype": "Data",
+   "in_filter": 1,
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "App Name",
+   "unique": 1
+  },
+  {
+   "description": "Paste the GitHub repository URL, e.g., git@github.com\n:org/xxxx.git.",
+   "fieldname": "repo",
+   "fieldtype": "Data",
+   "label": "Repo"
+  },
+  {
+   "description": "Default branch to deploy when no override is set, e.g., main.",
+   "fieldname": "default_branch",
+   "fieldtype": "Data",
+   "in_filter": 1,
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Default Branch"
+  },
+  {
+   "description": "Your GitHub webhook secret token to verify incoming requests.",
+   "fieldname": "webhook_secret",
+   "fieldtype": "Data",
+   "label": "Webhook Secret"
+  },
+  {
+   "fieldname": "column_break_hbzq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_mves",
+   "fieldtype": "Section Break",
+   "label": "Sites"
+  },
+  {
+   "fieldname": "sites",
+   "fieldtype": "Table",
+   "options": "Site Deployment"
+  },
+  {
+   "fieldname": "app_section",
+   "fieldtype": "Section Break",
+   "label": "MANAGE CI/CD FOR YOUR APPS"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-02-07 17:24:44.206329",
+ "modified_by": "Administrator",
+ "module": "Orchestrator",
+ "name": "App Manager",
+ "naming_rule": "Autoincrement",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
