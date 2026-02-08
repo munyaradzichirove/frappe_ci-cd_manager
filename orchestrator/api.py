@@ -80,5 +80,5 @@ def send_telegram_message(committer, commit_id, message, received_time):
         print("Response JSON:", resp.json())
         return {"status": "success", "response": resp.json()}
     except Exception as e:
-        print("❌ Failed to send Telegram message:", str(e))
+        print("❌ Failed to send Telegram message: ", str(e))
         return {"status": "error", "error": str(e)}
