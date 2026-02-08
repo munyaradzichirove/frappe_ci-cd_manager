@@ -1,25 +1,37 @@
 import frappe
+from frappe.utils import now_datetime
+from pytz import timezone
 
 @frappe.whitelist(allow_guest=True)
-def github_webhook():
-    payload = frappe.local.form_dict  # raw POST data
-    
+def github_webhook(**kwargs):
     import json
-    try:
-        # GitHub sends x-www-form-urlencoded if that's your content type
-        payload = json.loads(payload.get("payload"))
-    except:
-        pass  # already a dict
 
-    for commit in payload.get("commits", []):
-        committer = commit["committer"]["name"]
-        timestamp = commit["timestamp"]
-        message = commit["message"]
-        commit_id = commit["id"]
+    # Frappe receives the payload as a string sometimes
+    payload = kwargs.get("payload")
+    if isinstance(payload, str):
+        payload = json.loads(payload)
 
-        print(f"📌 Commit by {committer} at {timestamp}")
-        print(f"💬 Message: {message}")
-        print(f"🔗 Commit ID: {commit_id}")
-        print("-" * 40)
+    commits = payload.get("commits", [])
+    tz = timezone("Africa/Harare")
 
-    return "OK"
+    app_name = "Payroll"  # Replace with your App Manager name or find dynamically
+
+    for commit in commits:
+        committer = commit.get("committer", {}).get("name")
+        commit_id = commit.get("id")
+        message = commit.get("message")
+        received_time = now_datetime().astimezone(tz)
+
+        # Insert into child table
+        frappe.get_doc({
+            "doctype": "App Manager",
+            "app_name": app_name,
+            "commit_history": [{
+                "user": committer,
+                "commit_sha": commit_id,
+                "commit_message": message,
+                "received_time": received_time
+            }]
+        }).insert(ignore_permissions=True)
+    
+    return {"status": "success", "commits_processed": len(commits)}
