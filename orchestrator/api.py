@@ -1,17 +1,24 @@
 import frappe
 import json
+from urllib.parse import parse_qs
 
 @frappe.whitelist(allow_guest=True)
 def github_webhook():
-    # Raw request data
-    raw_data = frappe.request.data
+    raw_data = frappe.request.data  # bytes
+    raw_text = raw_data.decode("utf-8")  # decode bytes to str
+
+    # GitHub sent application/x-www-form-urlencoded
+    # It comes as: payload=%7B....%7D
+    # We need to parse it
+    parsed = parse_qs(raw_text)
+    payload_str = parsed.get("payload", [None])[0]
 
     try:
-        payload = json.loads(raw_data)
+        payload = json.loads(payload_str) if payload_str else raw_text
     except Exception:
-        payload = raw_data
+        payload = raw_text
 
-    # Print EVERYTHING (terminal + bench logs)
+    # Print everything
     print("\n" + "=" * 80)
     print("🔥 GITHUB WEBHOOK RECEIVED 🔥")
     print("=" * 80)
@@ -25,7 +32,4 @@ def github_webhook():
 
     print("\n" + "=" * 80)
 
-    return {
-        "status": "ok",
-        "message": "Webhook received and logged"
-    }
+    return {"status": "ok", "message": "Webhook received and logged"}
