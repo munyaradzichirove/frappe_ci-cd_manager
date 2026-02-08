@@ -42,13 +42,14 @@ def github_webhook(**kwargs):
         })
 
     doc.save(ignore_permissions=True)
+    send_telegram_message(committer, commit_id, message, received_time)
     return {"status": "success", "commits_added": len(commits)}
 
 def send_telegram_message(committer, commit_id, message, received_time):
     """
     Sends a commit notification to Telegram.
     """
-    BOT_TOKEN = "YOUR_TELEGRAM_BOT_TOKEN"
+    BOT_TOKEN = "8351272834:AAFZPJmdoCyjH_Ia- SUAUdmTL1D5Ecrzr4A"
     CHAT_ID = "YOUR_CHAT_ID"
 
     text = (
