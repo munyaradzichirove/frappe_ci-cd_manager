@@ -12,24 +12,27 @@ def github_webhook(**kwargs):
     commits = payload.get("commits", [])
     tz = timezone("Africa/Harare")
 
-    app_name = "Payroll"
+    repo_url = payload.get("repository", {}).get("html_url")
+    if not repo_url:
+        frappe.throw("No repository URL found in payload")
 
-    # get parent using filter
-    doc = frappe.get_all("App Manager", filters={"app_name": app_name}, limit=1)
-    if not doc:
-        # parent doesn't exist, create it
+    # get parent using repo filter
+    doc_list = frappe.get_all("App Manager", filters={"repo": repo_url}, limit=1)
+    if doc_list:
+        doc = frappe.get_doc("App Manager", doc_list[0].name)
+    else:
+        # create parent if it doesn't exist
         doc = frappe.get_doc({
             "doctype": "App Manager",
-            "app_name": app_name
+            "repo": repo_url
         }).insert(ignore_permissions=True)
-    else:
-        # fetch the full doc by its actual name
-        doc = frappe.get_doc("App Manager", doc[0].name)
+
     for commit in commits:
         committer = commit.get("committer", {}).get("name")
         commit_id = commit.get("id")
         message = commit.get("message")
         received_time = now_datetime().astimezone(tz)
+
         doc.append("commit_history", {
             "user": committer,
             "commit_sha": commit_id,
