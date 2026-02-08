@@ -30,7 +30,6 @@ def github_webhook(**kwargs):
         commit_id = commit.get("id")
         message = commit.get("message")
         received_time = now_datetime().astimezone(tz)
-
         doc.append("commit_history", {
             "user": committer,
             "commit_sha": commit_id,
