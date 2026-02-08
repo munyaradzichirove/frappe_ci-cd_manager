@@ -40,5 +40,4 @@ def github_webhook(**kwargs):
         })
 
     doc.save(ignore_permissions=True)
-
     return {"status": "success", "commits_added": len(commits)}
