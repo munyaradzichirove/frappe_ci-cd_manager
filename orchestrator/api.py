@@ -44,13 +44,14 @@ def github_webhook(**kwargs):
     doc.save(ignore_permissions=True)
     send_telegram_message(committer, commit_id, message, received_time)
     return {"status": "success", "commits_added": len(commits)}
+import requests
 
 def send_telegram_message(committer, commit_id, message, received_time):
     """
-    Sends a commit notification to Telegram.
+    Sends a commit notification to Telegram with debug prints.
     """
-    BOT_TOKEN = "8351272834:AAFZPJmdoCyjH_Ia- SUAUdmTL1D5Ecrzr4A"
-    CHAT_ID = "YOUR_CHAT_ID"
+    BOT_TOKEN = "8351272834:AAFZPJmdoCyjH_Ia-SUAUdmTL1D5Ecrzr4A"
+    CHAT_ID = "5664908324"
 
     text = (
         f"🛠️ *New Commit Received!*\n\n"
@@ -67,9 +68,17 @@ def send_telegram_message(committer, commit_id, message, received_time):
         "parse_mode": "Markdown"
     }
 
+    print("📤 Sending Telegram message...")
+    print("URL:", url)
+    print("Payload:", payload)
+
     try:
         resp = requests.post(url, json=payload, timeout=10)
+        print("⏳ Response received, status code:", resp.status_code)
         resp.raise_for_status()
+        print("✅ Telegram message sent successfully!")
+        print("Response JSON:", resp.json())
         return {"status": "success", "response": resp.json()}
     except Exception as e:
+        print("❌ Failed to send Telegram message:", str(e))
         return {"status": "error", "error": str(e)}
