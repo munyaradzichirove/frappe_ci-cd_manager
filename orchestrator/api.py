@@ -25,7 +25,6 @@ def github_webhook(**kwargs):
     else:
         # fetch the full doc by its actual name
         doc = frappe.get_doc("App Manager", doc[0].name)
-
     for commit in commits:
         committer = commit.get("committer", {}).get("name")
         commit_id = commit.get("id")
