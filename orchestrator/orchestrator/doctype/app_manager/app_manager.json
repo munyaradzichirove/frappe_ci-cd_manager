@@ -11,8 +11,14 @@
   "column_break_hbzq",
   "default_branch",
   "webhook_secret",
+  "section_break_twqp",
+  "total_sites",
+  "column_break_ckes",
+  "total_commits",
   "section_break_mves",
-  "sites"
+  "sites",
+  "git_history_section",
+  "commit_history"
  ],
  "fields": [
   {
@@ -68,12 +74,40 @@
    "fieldname": "app_section",
    "fieldtype": "Section Break",
    "label": "MANAGE CI/CD FOR YOUR APPS"
+  },
+  {
+   "fieldname": "section_break_twqp",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_ckes",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_sites",
+   "fieldtype": "HTML",
+   "label": "Total Sites"
+  },
+  {
+   "fieldname": "total_commits",
+   "fieldtype": "HTML",
+   "label": "Total Commits"
+  },
+  {
+   "fieldname": "git_history_section",
+   "fieldtype": "Section Break",
+   "label": "Git History"
+  },
+  {
+   "fieldname": "commit_history",
+   "fieldtype": "Table",
+   "options": "Git History"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-07 17:24:44.206329",
+ "modified": "2026-02-07 18:01:23.546698",
  "modified_by": "Administrator",
  "module": "Orchestrator",
  "name": "App Manager",
