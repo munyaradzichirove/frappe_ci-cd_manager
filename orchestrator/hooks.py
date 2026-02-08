@@ -247,3 +247,14 @@ app_license = "mit"
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
 
+# hooks.py
+fixtures = [
+    {
+        "dt": "Client Script",
+        "filters": [
+            ["name", "in", [
+                "sites_count"  # <-- replace with your actual client script name(s)
+            ]]
+        ]
+    }
+]

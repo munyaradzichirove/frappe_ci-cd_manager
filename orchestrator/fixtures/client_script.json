@@ -1,0 +1,13 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "App Manager",
+  "enabled": 1,
+  "modified": "2026-02-07 18:03:05.694597",
+  "module": "Orchestrator",
+  "name": "sites_count",
+  "script": "frappe.ui.form.on('App Manager', {\n    refresh(frm) {\n\n        // === Total Sites Card (green) ===\n        const total_sites = (frm.doc.sites || []).length;\n        frm.set_df_property('total_sites', 'options', `\n            <div style=\"\n                background-color: #28a745;\n                color: white;\n                padding: 15px;\n                border-radius: 8px;\n                font-size: 16px;\n                font-weight: bold;\n                text-align: center;\n                width: 400px;\n                margin: 0 auto;\n            \">\n                Total Sites: ${total_sites}\n            </div>\n        `);\n\n        // === Total Commits Card (orange) ===\n        const total_commits = (frm.doc.commit_history || []).length;\n        frm.set_df_property('total_commits', 'options', `\n            <div style=\"\n                background-color: #fd7e14;\n                color: white;\n                padding: 15px;\n                border-radius: 8px;\n                font-size: 16px;\n                font-weight: bold;\n                text-align: center;\n                width: 400px;\n                margin: 10px auto 0 auto;\n            \">\n                Total Commits: ${total_commits}\n            </div>\n        `);\n    }\n});\n",
+  "view": "Form"
+ }
+]
