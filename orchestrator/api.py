@@ -31,6 +31,5 @@ def github_webhook():
     print(json.dumps(payload, indent=4))
 
     print("\n" + "=" * 80)
-
     return {"status": "ok", "message": "Webhook received and logged"}
  
