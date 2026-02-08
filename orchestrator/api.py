@@ -1,6 +1,7 @@
 import frappe
 from frappe.utils import now_datetime
 from pytz import timezone
+import requests
 
 @frappe.whitelist(allow_guest=True)
 def github_webhook(**kwargs):
@@ -42,3 +43,32 @@ def github_webhook(**kwargs):
 
     doc.save(ignore_permissions=True)
     return {"status": "success", "commits_added": len(commits)}
+
+def send_telegram_message(committer, commit_id, message, received_time):
+    """
+    Sends a commit notification to Telegram.
+    """
+    BOT_TOKEN = "YOUR_TELEGRAM_BOT_TOKEN"
+    CHAT_ID = "YOUR_CHAT_ID"
+
+    text = (
+        f"🛠️ *New Commit Received!*\n\n"
+        f"*Committer:* {committer}\n"
+        f"*Commit SHA:* `{commit_id}`\n"
+        f"*Message:* {message}\n"
+        f"*Received Time:* {received_time}"
+    )
+
+    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
+    payload = {
+        "chat_id": CHAT_ID,
+        "text": text,
+        "parse_mode": "Markdown"
+    }
+
+    try:
+        resp = requests.post(url, json=payload, timeout=10)
+        resp.raise_for_status()
+        return {"status": "success", "response": resp.json()}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
