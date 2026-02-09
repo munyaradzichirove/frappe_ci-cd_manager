@@ -50,8 +50,8 @@ def send_telegram_message(committer, commit_id, message, received_time):
     """
     Sends a commit notification to Telegram with debug prints.
     """
-    BOT_TOKEN = "8351272834:AAFZPJmdoCyjH_Ia-SUAUdmTLlD5Ecrzr4A"
-    CHAT_ID = "5664908324"
+    BOT_TOKEN = ""
+    CHAT_ID = ""
 
     text = (
         f"🛠️ *New Commit Received!*\n\n"
