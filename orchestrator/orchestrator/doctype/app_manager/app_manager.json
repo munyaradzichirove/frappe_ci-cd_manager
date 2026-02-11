@@ -8,7 +8,6 @@
   "app_section",
   "app_name",
   "repo",
-  "test_field",
   "column_break_hbzq",
   "default_branch",
   "webhook_secret",
@@ -107,11 +106,6 @@
    "options": "Git History"
   },
   {
-   "fieldname": "test_field",
-   "fieldtype": "Data",
-   "label": "Test Field"
-  },
-  {
    "fieldname": "section_break_qpkz",
    "fieldtype": "Section Break",
    "label": "Logs"
@@ -125,7 +119,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-11 23:46:05.479318",
+ "modified": "2026-02-12 00:14:23.467913",
  "modified_by": "Administrator",
  "module": "Orchestrator",
  "name": "App Manager",
