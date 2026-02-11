@@ -8,6 +8,7 @@
   "notifications_section",
   "telegram_bot_token",
   "enable",
+  "test",
   "column_break_ozyw",
   "chat_id"
  ],
@@ -36,13 +37,18 @@
    "fieldname": "chat_id",
    "fieldtype": "Data",
    "label": "CHAT ID"
+  },
+  {
+   "fieldname": "test",
+   "fieldtype": "Button",
+   "label": "Test "
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-02-09 12:14:35.095107",
+ "modified": "2026-02-09 12:23:43.556454",
  "modified_by": "Administrator",
  "module": "Orchestrator",
  "name": "Orchestrator Settings",

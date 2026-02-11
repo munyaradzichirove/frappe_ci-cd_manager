@@ -12,11 +12,9 @@ def github_webhook(**kwargs):
 
     commits = payload.get("commits", [])
     tz = timezone("Africa/Harare")
-
     repo_url = payload.get("repository", {}).get("html_url")
     if not repo_url:
         frappe.throw("No repository URL found in payload")
-
     # get parent using repo filter
     doc_list = frappe.get_all("App Manager", filters={"repo": repo_url}, limit=1)
     if doc_list:
@@ -40,7 +38,6 @@ def github_webhook(**kwargs):
             "commit_message": message,
             "received_time": received_time
         })
-
     doc.save(ignore_permissions=True)
     send_telegram_message(committer, commit_id, message, received_time)
     return {"status": "success", "commits_added": len(commits)}
@@ -82,3 +79,19 @@ def send_telegram_message(committer, commit_id, message, received_time):
     except Exception as e:
         print("❌ Failed to send Telegram message: ", str(e))
         return {"status": "error", "error": str(e)}
+
+@frappe.whitelist()
+def test_telegram(telegram_bot_token, chat_id):
+    try:
+        url = f"https://api.telegram.org/bot{telegram_bot_token}/sendMessage"
+        payload = {
+            "chat_id": chat_id,
+            "text": "Test message from Orchestrator Settings!"
+        }
+        r = requests.post(url, json=payload)
+        if r.status_code == 200:
+            return "Telegram message sent successfully!"
+        else:
+            return f"Failed to send message: {r.text}"
+    except Exception as e:
+        return f"Error: {str(e)}"
