@@ -148,7 +148,7 @@ def run_ansible_playbook(repo_url):
         # stream output line by line to doc
         for line in process.stdout:
             line = line.rstrip()
-            print(line)  # optional console print
+            print(line) 
             append_log(line)
 
         process.wait()
