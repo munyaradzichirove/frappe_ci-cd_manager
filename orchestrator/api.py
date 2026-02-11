@@ -110,22 +110,33 @@ def enqueue_ansible_playbook():
         queue="short",
         timeout=3600  # 1 hour max
 )
-
 def run_ansible_playbook(repo_url):
     """
-    Runs Ansible playbook for the given site and streams output to last_deploy_log.
+    Runs Ansible playbook for the given repo and streams output to last_deploy_log.
     """
+    import subprocess, os, frappe
+    from rq.registry import StartedJobRegistry
+    from frappe.utils.background_jobs import get_queues
+
     base_path = os.path.dirname(os.path.abspath(__file__))
     ansible_path = os.path.join(base_path, "ansible")
     inventory_file = os.path.join(ansible_path, "inventory.ini")
     playbook_file = os.path.join(ansible_path, "deploy.yml")
 
-    # get App Manager doc for the site
-    doc = frappe.get_all("App Manager", filters={"repo": repo_url}, limit=1)
+    # fetch the App Manager doc
+    docs = frappe.get_all("App Manager", filters={"repo": repo_url}, limit=1)
+    if not docs:
+        frappe.throw(f"No App Manager found for repo {repo_url}")
+    doc = frappe.get_doc("App Manager", docs[0].name)
 
-    # reset log before new run
+    # reset log
     doc.last_deploy_log = ""
     doc.save(ignore_permissions=True)
+
+    # helper to append line safely
+    def append_log(line):
+        doc.last_deploy_log = (doc.last_deploy_log or "") + line + "\n"
+        doc.save(ignore_permissions=True)
 
     try:
         process = subprocess.Popen(
@@ -136,19 +147,16 @@ def run_ansible_playbook(repo_url):
             text=True
         )
 
-        # stream output line by line
+        # stream output line by line to doc
         for line in process.stdout:
-            line = line.rstrip()  # remove extra newlines
-            print(line)           # optional console print
-            # append to Frappe log field
-            doc.append_log(line)
+            line = line.rstrip()
+            print(line)  # optional console print
+            append_log(line)
 
         process.wait()
-
-        # mark deployment finished
-        doc.append_log("\n✅ Deployment finished!\n")
+        append_log("\n✅ Deployment finished!\n")
         return {"status": "success"}
 
     except Exception as e:
-        doc.append_log(f"\n❌ Deployment failed: {str(e)}\n")
+        append_log(f"\n❌ Deployment failed: {str(e)}\n")
         return {"status": "error", "error": str(e)}
