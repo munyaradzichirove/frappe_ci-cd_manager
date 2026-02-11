@@ -154,7 +154,7 @@ def run_ansible_playbook(repo_url):
             append_log(line)
 
         process.wait()
-        append_log("\n✅ Deployment finished!\n")
+        append_log("\n✅ Deployment is finished!\n")
         return {"status": "success"}
 
     except Exception as e:
