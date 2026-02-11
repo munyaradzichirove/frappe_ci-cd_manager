@@ -26,6 +26,7 @@ def github_webhook(**kwargs):
             "repo": repo_url
         }).insert(ignore_permissions=True)
 
+
     for commit in commits:
         committer = commit.get("committer", {}).get("name")
         commit_id = commit.get("id")
@@ -41,14 +42,16 @@ def github_webhook(**kwargs):
     doc.save(ignore_permissions=True)
     send_telegram_message(committer, commit_id, message, received_time)
     return {"status": "success", "commits_added": len(commits)}
-import requests
 
 def send_telegram_message(committer, commit_id, message, received_time):
     """
-    Sends a commit notification to Telegram with debug prints.
+    Sends a commit notification to Telegram using bot token and chat ID from Orchestrator Settings.
     """
-    BOT_TOKEN = ""
-    CHAT_ID = ""
+    # Get the Orchestrator Settings record (assuming single doctype or only one record)
+    settings = frappe.get_single("Orchestrator Settings")
+
+    BOT_TOKEN = settings.telegram_bot_token
+    CHAT_ID = settings.chat_id
 
     text = (
         f"🛠️ *New Commit Received!*\n\n"
