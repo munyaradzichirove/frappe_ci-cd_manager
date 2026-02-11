@@ -1,0 +1,37 @@
+---
+- name: Pull latest Frappe app, migrate, and restart Bench
+  hosts: erp_servers
+  gather_facts: no
+  become: yes
+
+  vars:
+    bench_path: "/home/frappe/frappe-bench"
+    app_name: "orchestrator"
+    repo_url: "https://github.com/munyaradzichirove/frappe_ci-cd_manager.git"
+    branch: "main"
+    remote: "upstream"
+    site_name: "flowmaster.veritypack.cloud"
+
+  tasks:
+    - name: Ensure Bench apps directory exists
+      file:
+        path: "{{ bench_path }}/apps"
+        state: directory
+
+    - name: Pull latest code for the app
+      git:
+        repo: "{{ repo_url }}"
+        dest: "{{ bench_path }}/apps/{{ app_name }}"
+        version: "{{ branch }}"
+        remote: "{{ remote }}"
+        force: yes
+
+    - name: Run Frappe migrations for site
+      command: bench --site {{ site_name }} migrate
+      args:
+        chdir: "{{ bench_path }}"
+
+    - name: Restart Bench
+      command: bench restart
+      args:
+        chdir: "{{ bench_path }}"

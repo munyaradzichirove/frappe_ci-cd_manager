@@ -2,6 +2,10 @@ import frappe
 from frappe.utils import now_datetime
 from pytz import timezone
 import requests
+import subprocess
+import os
+
+
 
 @frappe.whitelist(allow_guest=True)
 def github_webhook(**kwargs):
@@ -41,6 +45,7 @@ def github_webhook(**kwargs):
         })
     doc.save(ignore_permissions=True)
     send_telegram_message(committer, commit_id, message, received_time)
+    run_ansible_playbook(repo_url)
     return {"status": "success", "commits_added": len(commits)}
 
 def send_telegram_message(committer, commit_id, message, received_time):
@@ -98,3 +103,52 @@ def test_telegram(telegram_bot_token, chat_id):
             return f"Failed to send message: {r.text}"
     except Exception as e:
         return f"Error: {str(e)}"
+
+def enqueue_ansible_playbook():
+    frappe.enqueue(
+        "orchestrator.api.run_ansible_playbook",
+        queue="short",
+        timeout=3600  # 1 hour max
+)
+
+def run_ansible_playbook(repo_url):
+    """
+    Runs Ansible playbook for the given site and streams output to last_deploy_log.
+    """
+    base_path = os.path.dirname(os.path.abspath(__file__))
+    ansible_path = os.path.join(base_path, "ansible")
+    inventory_file = os.path.join(ansible_path, "inventory.ini")
+    playbook_file = os.path.join(ansible_path, "deploy.yml")
+
+    # get App Manager doc for the site
+    doc = frappe.get_all("App Manager", filters={"repo": repo_url}, limit=1)
+
+    # reset log before new run
+    doc.last_deploy_log = ""
+    doc.save(ignore_permissions=True)
+
+    try:
+        process = subprocess.Popen(
+            ["ansible-playbook", "-i", inventory_file, playbook_file],
+            cwd=ansible_path,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True
+        )
+
+        # stream output line by line
+        for line in process.stdout:
+            line = line.rstrip()  # remove extra newlines
+            print(line)           # optional console print
+            # append to Frappe log field
+            doc.append_log(line)
+
+        process.wait()
+
+        # mark deployment finished
+        doc.append_log("\n✅ Deployment finished!\n")
+        return {"status": "success"}
+
+    except Exception as e:
+        doc.append_log(f"\n❌ Deployment failed: {str(e)}\n")
+        return {"status": "error", "error": str(e)}

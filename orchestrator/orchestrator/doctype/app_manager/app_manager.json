@@ -19,7 +19,9 @@
   "section_break_mves",
   "sites",
   "git_history_section",
-  "commit_history"
+  "commit_history",
+  "section_break_qpkz",
+  "last_deploy_log"
  ],
  "fields": [
   {
@@ -108,12 +110,22 @@
    "fieldname": "test_field",
    "fieldtype": "Data",
    "label": "Test Field"
+  },
+  {
+   "fieldname": "section_break_qpkz",
+   "fieldtype": "Section Break",
+   "label": "Logs"
+  },
+  {
+   "fieldname": "last_deploy_log",
+   "fieldtype": "Long Text",
+   "label": "Last Deploy Logs"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-11 23:09:44.795814",
+ "modified": "2026-02-11 23:46:05.479318",
  "modified_by": "Administrator",
  "module": "Orchestrator",
  "name": "App Manager",
