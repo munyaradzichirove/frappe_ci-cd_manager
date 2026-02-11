@@ -132,8 +132,6 @@ def run_ansible_playbook(repo_url):
     # reset log
     doc.last_deploy_log = ""
     doc.save(ignore_permissions=True)
-
-    # helper to append line safely
     def append_log(line):
         doc.last_deploy_log = (doc.last_deploy_log or "") + line + "\n"
         doc.save(ignore_permissions=True)
