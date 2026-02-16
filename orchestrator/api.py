@@ -30,7 +30,6 @@ def github_webhook(**kwargs):
             "repo": repo_url
         }).insert(ignore_permissions=True)
 
-
     for commit in commits:
         committer = commit.get("committer", {}).get("name")
         commit_id = commit.get("id")
@@ -144,7 +143,6 @@ def run_ansible_playbook(repo_url):
             stderr=subprocess.STDOUT,
             text=True
         )
-
         # stream output line by line to doc
         for line in process.stdout:
             line = line.rstrip()
@@ -158,3 +156,45 @@ def run_ansible_playbook(repo_url):
     except Exception as e:
         append_log(f"\n❌ Deployment failed: {str(e)}\n")
         return {"status": "error", "error": str(e)}
+
+def build_inventory_from_repo(repo_url):
+    import os, frappe
+
+    docs = frappe.get_all("App Manager", filters={"repo": repo_url}, limit=1)
+    if not docs:
+        frappe.throw(f"No App Manager found for repo {repo_url}")
+
+    doc = frappe.get_doc("App Manager", docs[0].name)
+
+    lines = ["[erp_servers]"]
+
+    for row in doc.sites:
+        if row.pause_pull:
+            continue
+
+        real_site = frappe.db.get_value(
+            "Site Inventory",
+            row.site,          # this is the ID / name
+            "site_name"             # real field you want
+        )
+
+        if not real_site:
+            frappe.throw(f"Site Deployment {row.site} has no site value")
+
+        lines.append(
+            f"{row.ip} "
+            f"ansible_user=frappe "
+            f"ansible_ssh_private_key_file=~/.ssh/id_rsa "
+            f"site_name={real_site}"
+        )
+
+    if len(lines) == 1:
+        frappe.throw("No active sites to deploy (all paused)")
+
+    base_path = os.path.dirname(os.path.abspath(__file__))
+    inventory_path = os.path.join(base_path, "ansible", "inventory.ini")
+
+    with open(inventory_path, "w") as f:
+        f.write("\n".join(lines))
+
+    return inventory_path
