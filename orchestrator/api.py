@@ -121,6 +121,7 @@ def run_ansible_playbook(repo_url):
     ansible_path = os.path.join(base_path, "ansible")
     inventory_file = os.path.join(ansible_path, "inventory.ini")
     playbook_file = os.path.join(ansible_path, "deploy.yml")
+    build_inventory_from_repo(repo_url)
 
     # fetch the App Manager doc
     docs = frappe.get_all("App Manager", filters={"repo": repo_url}, limit=1)
@@ -167,25 +168,36 @@ def build_inventory_from_repo(repo_url):
     doc = frappe.get_doc("App Manager", docs[0].name)
 
     lines = ["[erp_servers]"]
+    seen_hosts = set()
 
     for row in doc.sites:
         if row.pause_pull:
             continue
 
+        host = (row.ip or "").strip()
+        if not host:
+            continue
+
+        if host in seen_hosts:
+            continue
+        seen_hosts.add(host)
+
         real_site = frappe.db.get_value(
             "Site Inventory",
-            row.site,          # this is the ID / name
-            "site_name"             # real field you want
+            row.site,
+            "site_name"
         )
 
         if not real_site:
-            frappe.throw(f"Site Deployment {row.site} has no site value")
+            frappe.throw(f"Site Inventory {row.site} has no site_name")
+
+        safe_site = real_site.replace('"', '\\"')
 
         lines.append(
-            f"{row.ip} "
-            f"ansible_user=frappe "
-            f"ansible_ssh_private_key_file=~/.ssh/id_rsa "
-            f"site_name={real_site}"
+            f'{host} '
+            f'ansible_user=frappe '
+            f'ansible_ssh_private_key_file=~/.ssh/id_rsa '
+            f'site_name="{safe_site}"'
         )
 
     if len(lines) == 1:
