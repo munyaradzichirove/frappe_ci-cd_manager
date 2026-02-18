@@ -46,6 +46,7 @@ def github_webhook(**kwargs):
     run_ansible_playbook(repo_url)
     return {"status": "success", "commits_added": len(commits)}
 
+
 def send_telegram_message(committer, commit_id, message, received_time):
     """
     Sends a commit notification to Telegram using bot token and chat ID from  Orchestrator Settings.
