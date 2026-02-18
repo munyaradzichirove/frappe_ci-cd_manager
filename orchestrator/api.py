@@ -161,8 +161,6 @@ def build_inventory_from_repo(repo_url):
     doc = frappe.get_doc("App Manager", docs[0].name)
     lines = ["[erp_servers]"]
     seen_entries = set()  
-
-
     for row in doc.sites:
         if row.pause_pull:
             continue
