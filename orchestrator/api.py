@@ -29,6 +29,7 @@ def github_webhook(**kwargs):
         }).insert(ignore_permissions=True)
 
 
+
     for commit in commits:
         committer = commit.get("committer", {}).get("name")
         commit_id = commit.get("id")
