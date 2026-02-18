@@ -45,7 +45,7 @@ def github_webhook(**kwargs):
     # doc.save(ignore_permissions=True)
     # send_telegram_message(committer, commit_id, message, received_time)
     # run_ansible_playbook(repo_url)
-    return {"status": "success", "commits_added": len(commits)}
+    return {"status": "success"}
 
 def send_telegram_message(committer, commit_id, message, received_time):
     """
