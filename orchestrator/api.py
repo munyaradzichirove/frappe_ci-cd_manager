@@ -64,7 +64,6 @@ def send_telegram_message(committer, commit_id, message, received_time):
         f"*Message:* {message}\n"
         f"*Received Time:* {received_time}"
     )
-
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
     payload = {
         "chat_id": CHAT_ID,
