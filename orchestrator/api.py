@@ -8,7 +8,7 @@ import os
 @frappe.whitelist(allow_guest=True)
 def github_webhook(**kwargs):
     import json
-    
+
     payload = kwargs.get("payload")
     if isinstance(payload, str):
         payload = json.loads(payload)
@@ -182,6 +182,7 @@ def build_inventory_from_repo(repo_url):
             row.site,
             "site_name"
         )
+
 
         if not real_site:
             frappe.throw(f"Site Inventory {row.site} has no site_name")
