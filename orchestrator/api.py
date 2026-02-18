@@ -42,6 +42,7 @@ def github_webhook(**kwargs):
             "received_time": received_time
         })
     doc.save(ignore_permissions=True)
+    frappe.db.commit() 
     send_telegram_message(committer, commit_id, message, received_time)
     run_ansible_playbook(repo_url)
     return {"status": "success", "commits_added": len(commits)}

@@ -3,6 +3,7 @@
   hosts: erp_servers
   gather_facts: no
   become: yes
+  become_user: frappe
 
   vars:
     bench_path: "/home/frappe/frappe-bench"
