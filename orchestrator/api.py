@@ -71,7 +71,6 @@ def send_telegram_message(committer, commit_id, message, received_time):
         "text": text,
         "parse_mode": "Markdown"
     }
-
     print("📤 Sending Telegram message...")
     print("URL:", url)
     print("Payload:", payload)
