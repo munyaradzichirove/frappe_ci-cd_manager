@@ -17,7 +17,7 @@ def github_webhook(**kwargs):
     repo_url = payload.get("repository", {}).get("html_url")
     if not repo_url:
         frappe.throw("No repository URL found in payload")
-    # get parent using repo filter
+  
     doc_list = frappe.get_all("App Manager", filters={"repo": repo_url}, limit=1)
     if doc_list:
         doc = frappe.get_doc("App Manager", doc_list[0].name)
