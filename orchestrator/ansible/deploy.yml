@@ -32,7 +32,7 @@
       args:
         chdir: "{{ bench_path }}"
 
-    - name: Restart Bench
-      command: bench restart
-      args:
-        chdir: "{{ bench_path }}"
+    # - name: Restart Bench
+    #   command: bench restart
+    #   args:
+    #     chdir: "{{ bench_path }}"
