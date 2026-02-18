@@ -152,7 +152,6 @@ def run_ansible_playbook(repo_url):
     except Exception as e:
         append_log(f"\n❌ Deployment failed: {str(e)}\n")
         return {"status": "error", "error": str(e)}
-
 def build_inventory_from_repo(repo_url):
     import os, frappe
 
@@ -163,7 +162,7 @@ def build_inventory_from_repo(repo_url):
     doc = frappe.get_doc("App Manager", docs[0].name)
 
     lines = ["[erp_servers]"]
-    seen_hosts = set()
+    seen_entries = set()  # track (host, site_name) combos
 
     for row in doc.sites:
         if row.pause_pull:
@@ -173,21 +172,21 @@ def build_inventory_from_repo(repo_url):
         if not host:
             continue
 
-        if host in seen_hosts:
-            continue
-        seen_hosts.add(host)
-
         real_site = frappe.db.get_value(
             "Site Inventory",
             row.site,
             "site_name"
         )
 
-
         if not real_site:
             frappe.throw(f"Site Inventory {row.site} has no site_name")
 
         safe_site = real_site.replace('"', '\\"')
+
+        key = (host, safe_site)
+        if key in seen_entries:
+            continue
+        seen_entries.add(key)
 
         lines.append(
             f'{host} '
