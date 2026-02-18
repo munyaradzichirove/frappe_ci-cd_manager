@@ -56,7 +56,6 @@ def send_telegram_message(committer, commit_id, message, received_time):
 
     BOT_TOKEN = settings.telegram_bot_token
     CHAT_ID = settings.chat_id
-
     text = (
         f"🛠️ *New Commit Received!*\n\n"
         f"*Committer:* {committer}\n"
