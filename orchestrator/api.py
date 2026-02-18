@@ -164,6 +164,7 @@ def build_inventory_from_repo(repo_url):
     docs = frappe.get_all("App Manager", filters={"repo": repo_url}, limit=1)
     if not docs:
         frappe.throw(f"No App Manager found for repo {repo_url}")
+
     doc = frappe.get_doc("App Manager", docs[0].name)
 
     lines = ["[erp_servers]"]
