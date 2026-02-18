@@ -154,7 +154,6 @@ def run_ansible_playbook(repo_url):
         return {"status": "error", "error": str(e)}
 def build_inventory_from_repo(repo_url):
     import os, frappe
-
     docs = frappe.get_all("App Manager", filters={"repo": repo_url}, limit=1)
     if not docs:
         frappe.throw(f"No App Manager found for repo {repo_url}")
