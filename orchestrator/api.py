@@ -14,7 +14,6 @@ def github_webhook(**kwargs):
     if isinstance(payload, str):
         payload = json.loads(payload)
 
-
     commits = payload.get("commits", [])
     tz = timezone("Africa/Harare")
     repo_url = payload.get("repository", {}).get("html_url")
