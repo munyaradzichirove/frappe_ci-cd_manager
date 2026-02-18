@@ -8,6 +8,7 @@ import os
 @frappe.whitelist(allow_guest=True)
 def github_webhook(**kwargs):
     import json
+    
     payload = kwargs.get("payload")
     if isinstance(payload, str):
         payload = json.loads(payload)
