@@ -8,6 +8,7 @@
   "app_section",
   "app_name",
   "repo",
+  "test_field",
   "column_break_hbzq",
   "default_branch",
   "webhook_secret",
@@ -114,12 +115,17 @@
    "fieldname": "last_deploy_log",
    "fieldtype": "Long Text",
    "label": "Last Deploy Logs"
+  },
+  {
+   "fieldname": "test_field",
+   "fieldtype": "Data",
+   "label": "Test Field"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-12 00:14:23.467913",
+ "modified": "2026-02-18 15:55:36.709767",
  "modified_by": "Administrator",
  "module": "Orchestrator",
  "name": "App Manager",
