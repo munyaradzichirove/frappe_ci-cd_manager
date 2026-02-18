@@ -164,6 +164,7 @@ def build_inventory_from_repo(repo_url):
     lines = ["[erp_servers]"]
     seen_entries = set()  
 
+
     for row in doc.sites:
         if row.pause_pull:
             continue
