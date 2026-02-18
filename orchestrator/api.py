@@ -74,7 +74,6 @@ def send_telegram_message(committer, commit_id, message, received_time):
     print("📤 Sending Telegram message...")
     print("URL:", url)
     print("Payload:", payload)
-
     try:
         resp = requests.post(url, json=payload, timeout=10)
         print("⏳ Response received, status code:", resp.status_code)
