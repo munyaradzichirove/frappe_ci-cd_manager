@@ -9,6 +9,7 @@
   "app_name",
   "repo",
   "test_field",
+  "test_field_copy",
   "column_break_hbzq",
   "default_branch",
   "webhook_secret",
@@ -120,12 +121,17 @@
    "fieldname": "test_field",
    "fieldtype": "Data",
    "label": "Test Field"
+  },
+  {
+   "fieldname": "test_field_copy",
+   "fieldtype": "Data",
+   "label": "Test Field Copy"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-18 15:55:36.709767",
+ "modified": "2026-02-18 17:51:07.737278",
  "modified_by": "Administrator",
  "module": "Orchestrator",
  "name": "App Manager",
