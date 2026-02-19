@@ -200,6 +200,7 @@ def build_inventory_from_repo(repo_url):
     if len(lines) == 1:
         frappe.throw("No active sites to deploy (all paused)")
 
+
     # Write inventory file
     base_path = os.path.dirname(os.path.abspath(__file__))
     inventory_path = os.path.join(base_path, "ansible", "inventory.ini")
