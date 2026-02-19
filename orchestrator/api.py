@@ -152,41 +152,46 @@ def run_ansible_playbook(repo_url):
     except Exception as e:
         append_log(f"\n❌ Deployment failed: {str(e)}\n")
         return {"status": "error", "error": str(e)}
+
 def build_inventory_from_repo(repo_url):
     import os, frappe
+
+    # Fetch the App Manager doc
     docs = frappe.get_all("App Manager", filters={"repo": repo_url}, limit=1)
     if not docs:
         frappe.throw(f"No App Manager found for repo {repo_url}")
 
     doc = frappe.get_doc("App Manager", docs[0].name)
+
     lines = ["[erp_servers]"]
-    seen_entries = set()  
+    seen_entries = set()
+
     for row in doc.sites:
         if row.pause_pull:
             continue
 
-        host = (row.ip or "").strip()
-        if not host:
+        host_ip = (row.ip or "").strip()
+        if not host_ip:
             continue
 
-        real_site = frappe.db.get_value(
-            "Site Inventory",
-            row.site,
-            "site_name"
-        )
-
-        if not real_site:
+        site_name = frappe.db.get_value("Site Inventory", row.site, "site_name")
+        if not site_name:
             frappe.throw(f"Site Inventory {row.site} has no site_name")
 
-        safe_site = real_site.replace('"', '\\"')
+        safe_site = site_name.replace('"', '\\"')
 
-        key = (host, safe_site)
+        # Create a unique logical host identifier: site_name + IP
+        identifier = f"{safe_site.replace(' ', '_')}_{host_ip.replace('.', '_')}"
+
+        # Skip duplicates
+        key = (identifier, host_ip)
         if key in seen_entries:
             continue
         seen_entries.add(key)
 
+        # Append inventory line with ansible_host
         lines.append(
-            f'{host} '
+            f'{identifier} ansible_host={host_ip} '
             f'ansible_user=frappe '
             f'ansible_ssh_private_key_file=~/.ssh/id_rsa '
             f'site_name="{safe_site}"'
@@ -195,6 +200,7 @@ def build_inventory_from_repo(repo_url):
     if len(lines) == 1:
         frappe.throw("No active sites to deploy (all paused)")
 
+    # Write inventory file
     base_path = os.path.dirname(os.path.abspath(__file__))
     inventory_path = os.path.join(base_path, "ansible", "inventory.ini")
 
