@@ -18,21 +18,17 @@
         path: "{{ bench_path }}/apps"
         state: directory
 
-    - name: Pull latest code for the app
+    - name: Pull latest code for the app (once per server)
       git:
         repo: "{{ repo_url }}"
         dest: "{{ bench_path }}/apps/{{ app_name }}"
         version: "{{ branch }}"
         remote: "{{ remote }}"
         force: yes
+      run_once: true
+      delegate_to: "{{ inventory_hostname }}"
 
-    - name: Run Frappe migrations for site
+    - name: Run Frappe migrations for each site
       command: bench --site {{ hostvars[inventory_hostname]['site_name'] }} migrate
       args:
         chdir: "{{ bench_path }}"
-
-
-    # - name: Restart Bench
-    #   command: bench restart
-    #   args:
-    #     chdir: "{{ bench_path }}"
