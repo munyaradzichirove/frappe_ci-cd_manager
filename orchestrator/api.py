@@ -139,7 +139,6 @@ def run_ansible_playbook(repo_url):
             text=True
         )
 
-
         for line in process.stdout:
             line = line.rstrip()
             print(line)
