@@ -149,7 +149,7 @@ def run_ansible_playbook(repo_url):
 
         # --- update all sites in App Manager ---
         for site_row in doc.sites:
-            site_row.status = "Success"
+            site_row.last_deployment_status = "Success"
             site_row.last_deployment_time = now_datetime()
         doc.save(ignore_permissions=True)
 
