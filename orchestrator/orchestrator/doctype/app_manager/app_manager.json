@@ -8,13 +8,9 @@
   "app_section",
   "app_name",
   "repo",
-  "test_field_copy",
   "test_field_copy_copy",
   "test_field_copy_copy_copy",
   "test_field_copy_copy_copy_copy",
-  "test_field_copy_copy_copy_copy_copy",
-  "test_field_copy_copy_copy_copy_copy_copy",
-  "test_field_copy_copy_copy_copy_copy_copy_copy",
   "column_break_hbzq",
   "default_branch",
   "webhook_secret",
@@ -123,11 +119,6 @@
    "label": "Last Deploy Logs"
   },
   {
-   "fieldname": "test_field_copy",
-   "fieldtype": "Data",
-   "label": "Test Field Copy"
-  },
-  {
    "fieldname": "test_field_copy_copy",
    "fieldtype": "Data",
    "label": "Test Field Copy Copy"
@@ -141,27 +132,12 @@
    "fieldname": "test_field_copy_copy_copy_copy",
    "fieldtype": "Data",
    "label": "Test Field Copy Copy Copy Copy"
-  },
-  {
-   "fieldname": "test_field_copy_copy_copy_copy_copy",
-   "fieldtype": "Data",
-   "label": "Test Field Copy Copy Copy Copy Copy"
-  },
-  {
-   "fieldname": "test_field_copy_copy_copy_copy_copy_copy",
-   "fieldtype": "Data",
-   "label": "Test Field Copy Copy Copy Copy Copy Copy"
-  },
-  {
-   "fieldname": "test_field_copy_copy_copy_copy_copy_copy_copy",
-   "fieldtype": "Data",
-   "label": "Test Field Copy Copy Copy Copy Copy Copy Copy"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-20 21:31:52.769489",
+ "modified": "2026-02-20 21:38:38.069598",
  "modified_by": "Administrator",
  "module": "Orchestrator",
  "name": "App Manager",
