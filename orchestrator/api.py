@@ -152,6 +152,7 @@ def run_ansible_playbook(repo_url):
         append_log(f"\n❌ Deployment failed: {str(e)}\n")
         return {"status": "error", "error": str(e)}
 
+
 def build_inventory_from_repo(repo_url):
     import os, frappe
     # Fetch the App Manager doc
