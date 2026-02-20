@@ -8,7 +8,6 @@ import os
 @frappe.whitelist(allow_guest=True)
 def github_webhook(**kwargs):
     import json
-
     payload = kwargs.get("payload")
     if isinstance(payload, str):
         payload = json.loads(payload)
@@ -155,7 +154,6 @@ def run_ansible_playbook(repo_url):
 
 def build_inventory_from_repo(repo_url):
     import os, frappe
-
     # Fetch the App Manager doc
     docs = frappe.get_all("App Manager", filters={"repo": repo_url}, limit=1)
     if not docs:
@@ -165,7 +163,6 @@ def build_inventory_from_repo(repo_url):
 
     lines = ["[erp_servers]"]
     seen_entries = set()
-
     for row in doc.sites:
         if row.pause_pull:
             continue
@@ -206,5 +203,4 @@ def build_inventory_from_repo(repo_url):
 
     with open(inventory_path, "w") as f:
         f.write("\n".join(lines))
-
     return inventory_path
