@@ -103,21 +103,19 @@ def enqueue_ansible_playbook():
         queue="short",
         timeout=3600  # 1 hour max
 )
+import frappe
+from frappe.utils import now_datetime
+
 def run_ansible_playbook(repo_url):
-    """
-    Runs Ansible playbook for the given repo and streams output to last_deploy_log.
-    """
-    import subprocess, os, frappe
-    from rq.registry import StartedJobRegistry
-    from frappe.utils.background_jobs import get_queues
+    import subprocess, os
 
     base_path = os.path.dirname(os.path.abspath(__file__))
     ansible_path = os.path.join(base_path, "ansible")
     inventory_file = os.path.join(ansible_path, "inventory.ini")
     playbook_file = os.path.join(ansible_path, "deploy.yml")
+
     build_inventory_from_repo(repo_url)
 
-    # fetch the App Manager doc
     docs = frappe.get_all("App Manager", filters={"repo": repo_url}, limit=1)
     if not docs:
         frappe.throw(f"No App Manager found for repo {repo_url}")
@@ -126,6 +124,7 @@ def run_ansible_playbook(repo_url):
     # reset log
     doc.last_deploy_log = ""
     doc.save(ignore_permissions=True)
+
     def append_log(line):
         doc.last_deploy_log = (doc.last_deploy_log or "") + line + "\n"
         doc.save(ignore_permissions=True)
@@ -138,20 +137,26 @@ def run_ansible_playbook(repo_url):
             stderr=subprocess.STDOUT,
             text=True
         )
-        # stream output line by line to doc
+
         for line in process.stdout:
             line = line.rstrip()
-            print(line) 
+            print(line)
             append_log(line)
 
         process.wait()
         append_log("\n✅ Deployment is finished!\n")
+
+        # --- update all sites in App Manager ---
+        for site_row in doc.sites:
+            site_row.status = "Success"
+            site_row.last_deployment_time = now_datetime()
+        doc.save(ignore_permissions=True)
+
         return {"status": "success"}
 
     except Exception as e:
         append_log(f"\n❌ Deployment failed: {str(e)}\n")
         return {"status": "error", "error": str(e)}
-
 
 def build_inventory_from_repo(repo_url):
     import os, frappe
