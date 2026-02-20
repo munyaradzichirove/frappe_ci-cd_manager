@@ -8,7 +8,6 @@
   "app_section",
   "app_name",
   "repo",
-  "test_field",
   "test_field_copy",
   "test_field_copy_copy",
   "test_field_copy_copy_copy",
@@ -124,11 +123,6 @@
    "label": "Last Deploy Logs"
   },
   {
-   "fieldname": "test_field",
-   "fieldtype": "Data",
-   "label": "Test Field 111233"
-  },
-  {
    "fieldname": "test_field_copy",
    "fieldtype": "Data",
    "label": "Test Field Copy"
@@ -167,7 +161,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-20 20:59:21.380022",
+ "modified": "2026-02-20 21:31:52.769489",
  "modified_by": "Administrator",
  "module": "Orchestrator",
  "name": "App Manager",
