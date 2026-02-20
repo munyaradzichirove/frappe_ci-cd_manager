@@ -143,7 +143,6 @@ def run_ansible_playbook(repo_url):
             line = line.rstrip()
             print(line)
             append_log(line)
-
         process.wait()
         append_log("\n✅ Deployment is finished!\n")
 
