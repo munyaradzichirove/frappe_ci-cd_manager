@@ -47,10 +47,6 @@ def github_webhook(**kwargs):
     return {"status": "success", "commits_added": len(commits)}
 
 def send_telegram_message(committer, commit_id, message, received_time):
-    """
-    Sends a commit notification to Telegram using bot token and chat ID from  Orchestrator Settings.
-    """
-    # Get the Orchestrator Settings record (assuming single doctype or only one record)
     settings = frappe.get_single("Orchestrator Settings")
 
     BOT_TOKEN = settings.telegram_bot_token

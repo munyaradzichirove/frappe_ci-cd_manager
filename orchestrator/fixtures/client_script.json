@@ -31,5 +31,16 @@
   "name": "hide telegram configs",
   "script": "frappe.ui.form.on('Orchestrator Settings', {\n    refresh(frm) {\n        mask_field(frm, 'telegram_bot_token');\n        mask_field(frm, 'chat_id');\n    }\n});\n\nfunction mask_field(frm, fieldname) {\n    const field = frm.get_field(fieldname);\n    if (!field || !field.$input) return;\n\n    // Set input type to password (••••••)\n    field.$input.attr('type', 'password');\n\n    // Prevent accidental copy\n    field.$input.attr('autocomplete', 'new-password');\n}",
   "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "App Manager",
+  "enabled": 1,
+  "modified": "2026-02-21 21:21:03.464612",
+  "module": "Orchestrator",
+  "name": "hide webhook secret",
+  "script": "frappe.ui.form.on('App Manager', {\n    refresh(frm) {\n        mask_field(frm, 'webhook_secret');\n    }\n});\n\nfunction mask_field(frm, fieldname) {\n    const field = frm.get_field(fieldname);\n    if (!field || !field.$input) return;\n\n    // Make it look like a password field\n    field.$input.attr('type', 'password');\n\n    // Prevent browser autocomplete\n    field.$input.attr('autocomplete', 'new-password');\n}",
+  "view": "Form"
  }
 ]

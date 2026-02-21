@@ -255,7 +255,8 @@ fixtures = [
             ["name", "in", [
                 "sites_count" ,
                 "Telegram Test Config",
-                "hide telegram configs"
+                "hide telegram configs",
+                "hide webhook secret"
             ]]
         ]
     }
