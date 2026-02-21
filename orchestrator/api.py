@@ -129,6 +129,7 @@ def send_deploy_summary_telegram(repo_url, deployed_sites, error_count):
         print("✅ Deploy summary Telegram sent!")
     except Exception as e:
         print("❌ Failed to send deploy summary Telegram:", str(e))
+        
 def run_ansible_playbook(repo_url):
     from frappe.utils import now_datetime
 
