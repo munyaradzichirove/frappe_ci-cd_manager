@@ -22,7 +22,7 @@ def github_webhook(**kwargs):
     if doc_list:
         doc = frappe.get_doc("App Manager", doc_list[0].name)
     else:
-        # create parent if it doesn't exist
+        
         doc = frappe.get_doc({
             "doctype": "App Manager",
             "repo": repo_url
