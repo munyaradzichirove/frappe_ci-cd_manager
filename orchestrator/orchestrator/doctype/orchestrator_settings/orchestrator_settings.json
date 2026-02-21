@@ -10,6 +10,7 @@
   "enable",
   "test",
   "whatsapp_token",
+  "whatsapp_token_copy",
   "column_break_ozyw",
   "chat_id"
  ],
@@ -48,13 +49,18 @@
    "fieldname": "whatsapp_token",
    "fieldtype": "Data",
    "label": "Whatsapp Token"
+  },
+  {
+   "fieldname": "whatsapp_token_copy",
+   "fieldtype": "Data",
+   "label": "Whatsapp Token Copy"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-02-21 14:57:33.479479",
+ "modified": "2026-02-21 17:45:38.548596",
  "modified_by": "Administrator",
  "module": "Orchestrator",
  "name": "Orchestrator Settings",
