@@ -105,7 +105,10 @@ def enqueue_ansible_playbook():
         timeout=3600  # 1 hour max
 )
 def send_deploy_summary_telegram(repo_url, deployed_sites, error_count):
-    BOT_TOKEN, CHAT_ID = get_telegram_settings()
+    settings = frappe.get_single("Orchestrator Settings")()
+
+    BOT_TOKEN = settings.telegram_bot_token
+    CHAT_ID = settings.chat_id
 
     text = (
         "🚀 *Deployment Finished*\n\n"
