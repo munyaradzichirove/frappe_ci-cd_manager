@@ -9,6 +9,7 @@
   "telegram_bot_token",
   "enable",
   "test",
+  "whatapp_token",
   "column_break_ozyw",
   "chat_id"
  ],
@@ -42,13 +43,18 @@
    "fieldname": "test",
    "fieldtype": "Button",
    "label": "Test "
+  },
+  {
+   "fieldname": "whatapp_token",
+   "fieldtype": "Data",
+   "label": "Whatapp Token"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-02-21 23:40:56.137399",
+ "modified": "2026-02-21 23:52:04.419161",
  "modified_by": "Administrator",
  "module": "Orchestrator",
  "name": "Orchestrator Settings",
