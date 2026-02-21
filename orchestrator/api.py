@@ -81,6 +81,7 @@ def send_telegram_message(committer, commit_id, message, received_time):
     except Exception as e:
         print("❌ Failed to send Telegram message: ", str(e))
         return {"status": "error", "error": str(e)}
+        
 @frappe.whitelist()
 def test_telegram(telegram_bot_token, chat_id):
     try:
