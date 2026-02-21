@@ -129,7 +129,7 @@ def send_deploy_summary_telegram(repo_url, deployed_sites, error_count):
         print("✅ Deploy summary Telegram sent!")
     except Exception as e:
         print("❌ Failed to send deploy summary Telegram:", str(e))
-        
+
 def run_ansible_playbook(repo_url):
     from frappe.utils import now_datetime
 
@@ -170,10 +170,13 @@ def run_ansible_playbook(repo_url):
         rc = process.wait()
 
         for site_row in doc.sites:
+            if site_row.pause_pull:
+                continue  # skip paused sites
+
             site_row.last_deployment_time = now_datetime()
             if rc == 0:
                 site_row.last_deployment_status = "Success"
-                deployed_sites.append(site_row.site)
+                deployed_sites.append(str(site_row.site))  # ensure string
             else:
                 site_row.last_deployment_status = "Failed"
                 error_count += 1
