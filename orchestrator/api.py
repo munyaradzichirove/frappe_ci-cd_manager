@@ -123,6 +123,7 @@ def send_deploy_summary_telegram(repo_url, deployed_sites, error_count):
         "parse_mode": "Markdown"
     }
 
+
     try:
         resp = requests.post(url, json=payload, timeout=10)
         resp.raise_for_status()
