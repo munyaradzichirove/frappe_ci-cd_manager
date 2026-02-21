@@ -177,7 +177,7 @@ def run_ansible_playbook(repo_url):
             site_row.last_deployment_time = now_datetime()
             if rc == 0:
                 site_row.last_deployment_status = "Success"
-                deployed_sites.append(str(site_row.site))  # ensure string
+                deployed_sites.append(str(site_row.site_name))  # ensure string
             else:
                 site_row.last_deployment_status = "Failed"
                 error_count += 1
