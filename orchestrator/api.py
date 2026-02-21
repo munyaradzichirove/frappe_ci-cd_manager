@@ -170,7 +170,6 @@ def run_ansible_playbook(repo_url):
             else:
                 site_row.last_deployment_status = "Failed"
                 error_count += 1
-
         doc.save(ignore_permissions=True)
 
         send_deploy_summary_telegram(repo_url, deployed_sites, error_count)
@@ -183,7 +182,7 @@ def run_ansible_playbook(repo_url):
 
         send_deploy_summary_telegram(repo_url, deployed_sites, error_count)
         return {"status": "error", "error": str(e)}
-        
+
 def build_inventory_from_repo(repo_url):
     import os, frappe
     # Fetch the App Manager doc
