@@ -176,6 +176,7 @@ def build_inventory_from_repo(repo_url):
         if not host_ip:
             continue
 
+
         site_name = frappe.db.get_value("Site Inventory", row.site, "site_name")
         if not site_name:
             frappe.throw(f"Site Inventory {row.site} has no site_name")
