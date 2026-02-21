@@ -85,6 +85,7 @@
    "fetch_from": "site.site_name",
    "fieldname": "site_name",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Site Name"
   }
  ],
@@ -92,7 +93,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-02-21 20:56:47.306887",
+ "modified": "2026-02-21 21:07:47.688648",
  "modified_by": "Administrator",
  "module": "Orchestrator",
  "name": "Site Deployment",
