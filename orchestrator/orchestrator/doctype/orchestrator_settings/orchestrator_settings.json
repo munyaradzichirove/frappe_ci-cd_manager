@@ -11,7 +11,8 @@
   "test",
   "whatsapp_token",
   "column_break_ozyw",
-  "chat_id"
+  "chat_id",
+  "whatsap_template"
  ],
  "fields": [
   {
@@ -48,13 +49,18 @@
    "fieldname": "whatsapp_token",
    "fieldtype": "Data",
    "label": "Whatsapp Token"
+  },
+  {
+   "fieldname": "whatsap_template",
+   "fieldtype": "Data",
+   "label": "Whatsap Template"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-02-21 23:15:45.444480",
+ "modified": "2026-02-21 23:20:50.250227",
  "modified_by": "Administrator",
  "module": "Orchestrator",
  "name": "Orchestrator Settings",
