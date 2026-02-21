@@ -98,6 +98,7 @@ def test_telegram(telegram_bot_token, chat_id):
     except Exception as e:
         return f"Error: {str(e)}"
 
+
 def enqueue_ansible_playbook():
     frappe.enqueue(
         "orchestrator.api.run_ansible_playbook",
