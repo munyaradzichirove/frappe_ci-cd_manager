@@ -188,6 +188,7 @@ def run_ansible_playbook(repo_url):
             f"❌ Deployment failed\nRepo: {repo_url}\nError: {str(e)}"
         )
 
+
         return {"status": "error", "error": str(e)}
 def build_inventory_from_repo(repo_url):
     import os, frappe
