@@ -81,7 +81,7 @@ def send_telegram_message(committer, commit_id, message, received_time):
     except Exception as e:
         print("❌ Failed to send Telegram message: ", str(e))
         return {"status": "error", "error": str(e)}
-        
+
 @frappe.whitelist()
 def test_telegram(telegram_bot_token, chat_id):
     try:
@@ -112,7 +112,7 @@ def send_deploy_summary_telegram(repo_url, deployed_sites, error_count):
     text = (
         "🚀 *Deployment Finished*\n\n"
         f"*Repo:* {repo_url}\n"
-        f"*Sites:* {', '.join(deployed_sites) if deployed_sites else 'None'}\n"
+        f"*Sites:* {', '.join([str(s) for s in deployed_sites]) if deployed_sites else 'None'}\n"
         f"*Errors:* {error_count}"
     )
 
@@ -123,8 +123,12 @@ def send_deploy_summary_telegram(repo_url, deployed_sites, error_count):
         "parse_mode": "Markdown"
     }
 
-    requests.post(url, json=payload, timeout=10)
-
+    try:
+        resp = requests.post(url, json=payload, timeout=10)
+        resp.raise_for_status()
+        print("✅ Deploy summary Telegram sent!")
+    except Exception as e:
+        print("❌ Failed to send deploy summary Telegram:", str(e))
 def run_ansible_playbook(repo_url):
     from frappe.utils import now_datetime
 
