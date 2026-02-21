@@ -104,22 +104,26 @@ def enqueue_ansible_playbook():
         queue="short",
         timeout=3600  # 1 hour max
 )
-def send_telegram_message_success(message):
-    settings = frappe.get_single("Orchestrator Settings")
+def send_deploy_summary_telegram(repo_url, deployed_sites, error_count):
+    BOT_TOKEN, CHAT_ID = get_telegram_settings()
 
-    BOT_TOKEN = settings.telegram_bot_token
-    CHAT_ID = settings.chat_id
+    text = (
+        "🚀 *Deployment Finished*\n\n"
+        f"*Repo:* {repo_url}\n"
+        f"*Sites:* {', '.join(deployed_sites) if deployed_sites else 'None'}\n"
+        f"*Errors:* {error_count}"
+    )
 
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
     payload = {
         "chat_id": CHAT_ID,
-        "text": message
+        "text": text,
+        "parse_mode": "Markdown"
     }
-    r = requests.post(url, json=payload, timeout=10)
-    return r.status_code == 200
+
+    requests.post(url, json=payload, timeout=10)
 
 def run_ansible_playbook(repo_url):
-    import subprocess, os
     from frappe.utils import now_datetime
 
     base_path = os.path.dirname(os.path.abspath(__file__))
@@ -134,7 +138,6 @@ def run_ansible_playbook(repo_url):
         frappe.throw(f"No App Manager found for repo {repo_url}")
     doc = frappe.get_doc("App Manager", docs[0].name)
 
-    # reset log
     doc.last_deploy_log = ""
     doc.save(ignore_permissions=True)
 
@@ -155,41 +158,32 @@ def run_ansible_playbook(repo_url):
         )
 
         for line in process.stdout:
-            line = line.rstrip()
-            append_log(line)
+            append_log(line.rstrip())
 
-        process.wait()
+        rc = process.wait()
 
-        # --- update sites ---
         for site_row in doc.sites:
-            site_row.last_deployment_status = "Success"
             site_row.last_deployment_time = now_datetime()
-            deployed_sites.append(site_row.site)
-        
-        doc.save(ignore_permissions=True)
-        message = (
-            "✅ Deployment completed\n\n"
-            f"Repo: {repo_url}\n"
-            f"Sites: {', '.join(deployed_sites)}\n"
-            f"Errors: {error_count}"
-        )
-        send_telegram_message_success(message)
+            if rc == 0:
+                site_row.last_deployment_status = "Success"
+                deployed_sites.append(site_row.site)
+            else:
+                site_row.last_deployment_status = "Failed"
+                error_count += 1
 
-        return {"status": "success"}
+        doc.save(ignore_permissions=True)
+
+        send_deploy_summary_telegram(repo_url, deployed_sites, error_count)
+
+        return {"status": "success" if rc == 0 else "error"}
 
     except Exception as e:
         error_count += 1
-        append_log(f"\n❌ Deployment failed: {str(e)}\n")
+        append_log(f"❌ Deployment failed: {str(e)}")
 
-        telegram_bot_token, chat_id = get_telegram_config()
-        send_telegram_message(
-            telegram_bot_token,
-            chat_id,
-            f"❌ Deployment failed\nRepo: {repo_url}\nError: {str(e)}"
-        )
-
-
+        send_deploy_summary_telegram(repo_url, deployed_sites, error_count)
         return {"status": "error", "error": str(e)}
+        
 def build_inventory_from_repo(repo_url):
     import os, frappe
     # Fetch the App Manager doc
