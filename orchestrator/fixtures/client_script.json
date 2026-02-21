@@ -2,12 +2,34 @@
  {
   "docstatus": 0,
   "doctype": "Client Script",
+  "dt": "Orchestrator Settings",
+  "enabled": 1,
+  "modified": "2026-02-11 22:52:55.805175",
+  "module": "Orchestrator",
+  "name": "Telegram Test Config",
+  "script": "frappe.ui.form.on('Orchestrator Settings', {\n    test: function(frm) {\n        frappe.call({\n            method: \"orchestrator.api.test_telegram\",\n            args: {\n                telegram_bot_token: frm.doc.telegram_bot_token,\n                chat_id: frm.doc.chat_id\n            },\n            callback: function(r) {\n                if(r.message) {\n                    frappe.msgprint(r.message);\n                }\n            }\n        });\n    }\n});",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
   "dt": "App Manager",
   "enabled": 1,
   "modified": "2026-02-07 18:03:05.694597",
   "module": "Orchestrator",
   "name": "sites_count",
   "script": "frappe.ui.form.on('App Manager', {\n    refresh(frm) {\n\n        // === Total Sites Card (green) ===\n        const total_sites = (frm.doc.sites || []).length;\n        frm.set_df_property('total_sites', 'options', `\n            <div style=\"\n                background-color: #28a745;\n                color: white;\n                padding: 15px;\n                border-radius: 8px;\n                font-size: 16px;\n                font-weight: bold;\n                text-align: center;\n                width: 400px;\n                margin: 0 auto;\n            \">\n                Total Sites: ${total_sites}\n            </div>\n        `);\n\n        // === Total Commits Card (orange) ===\n        const total_commits = (frm.doc.commit_history || []).length;\n        frm.set_df_property('total_commits', 'options', `\n            <div style=\"\n                background-color: #fd7e14;\n                color: white;\n                padding: 15px;\n                border-radius: 8px;\n                font-size: 16px;\n                font-weight: bold;\n                text-align: center;\n                width: 400px;\n                margin: 10px auto 0 auto;\n            \">\n                Total Commits: ${total_commits}\n            </div>\n        `);\n    }\n});\n",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Orchestrator Settings",
+  "enabled": 1,
+  "modified": "2026-02-21 18:13:31.861249",
+  "module": "Orchestrator",
+  "name": "hide telegram configs",
+  "script": "frappe.ui.form.on('Orchestrator Settings', {\n    refresh(frm) {\n        mask_field(frm, 'telegram_bot_token');\n        mask_field(frm, 'chat_id');\n    }\n});\n\nfunction mask_field(frm, fieldname) {\n    const field = frm.get_field(fieldname);\n    if (!field || !field.$input) return;\n\n    // Set input type to password (••••••)\n    field.$input.attr('type', 'password');\n\n    // Prevent accidental copy\n    field.$input.attr('autocomplete', 'new-password');\n}",
   "view": "Form"
  }
 ]

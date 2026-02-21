@@ -253,7 +253,9 @@ fixtures = [
         "dt": "Client Script",
         "filters": [
             ["name", "in", [
-                "sites_count"  # <-- replace with your actual client script name(s)
+                "sites_count" ,
+                "Telegram Test Config",
+                "hide telegram configs"
             ]]
         ]
     }
